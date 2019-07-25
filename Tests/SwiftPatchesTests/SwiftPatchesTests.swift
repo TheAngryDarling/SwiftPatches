@@ -78,12 +78,18 @@ class SwiftPatchesTests: XCTestCase {
             XCTFail("\(error)")
         }
     }
+    
+    func testFullUserName() {
+        let fName = NSFullUserName()
+        print(fName)
+    }
 
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
         ("testFirstIndex", testFirstIndex),
         ("testRandomCollectionElement", testRandomCollectionElement),
         ("testRandomBool", testRandomBool),
-        ("testProcess", testProcess)
+        ("testProcess", testProcess),
+        ("testFullUserName", testFullUserName)
     ]
 }
