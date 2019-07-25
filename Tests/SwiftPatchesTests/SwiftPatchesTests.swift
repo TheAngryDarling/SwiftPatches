@@ -49,11 +49,41 @@ class SwiftPatchesTests: XCTestCase {
         }
         XCTAssert(!randBools.allEquals(), "All bools in the array were of the same value (\(randBools[0]).  There should be some of each value)")
     }
+    
+    func testProcess() {
+        let exec = URL(fileURLWithPath: "/bin/ls")
+        do {
+            let process = Process()
+            process.executable = exec
+            process.currentDirectory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            let pipe = Pipe()
+            #if os(macOS)
+            process.standardInput = FileHandle.nullDevice
+            #endif
+            process.standardOutput = pipe
+            process.standardOutput = pipe
+            
+            try process.execute()
+            process.waitUntilExit()
+            
+            XCTAssert(process.terminationStatus == 0, "Process failed to execute")
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            let str = String(data: data, encoding: .utf8)!
+            print(str)
+            
+            
+            
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
 
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
         ("testFirstIndex", testFirstIndex),
         ("testRandomCollectionElement", testRandomCollectionElement),
         ("testRandomBool", testRandomBool),
+        ("testProcess", testProcess)
     ]
 }
