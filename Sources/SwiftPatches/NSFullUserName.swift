@@ -7,7 +7,7 @@
 
 import Foundation
 
-#if !swift(>=4.1.9)
+#if !swift(>=4.1.9) && !_runtime(_ObjC)
     /// Returns a string containing the full name of the current user.
     ///
     /// This uses getpwnam method to get the full user name.  If nothing is reutrned from getpwnam a fatal error will occur
