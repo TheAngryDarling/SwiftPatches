@@ -4,7 +4,7 @@
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 
-Provides some of the missing classes/method when changing between different swift versions
+Provides some of the missing classes/method when changing between different Swift versions from Swift 4.0 and above
 
 Current supported fixed:
 * **Random** - Added random support for **Swift < 4.2** (RandomNumberGenerator, SystemRandomNumberGenerator)
