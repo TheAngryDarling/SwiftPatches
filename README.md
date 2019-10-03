@@ -1,4 +1,5 @@
 # Swift Patches
+
 ![swift >= 4.0](https://img.shields.io/badge/swift-%3E%3D4.0-brightgreen.svg)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
@@ -7,6 +8,7 @@
 Provides some of the missing classes/method when changing between different Swift versions from Swift 4.0 and above
 
 Current supported fixed:
+
 * **Random** - Added random support for **Swift < 4.2** (RandomNumberGenerator, SystemRandomNumberGenerator)
   * **Sequence** - Added shuffled method
   * **Collection** - Added randomElement method
@@ -39,6 +41,11 @@ Current supported fixed:
 * **NSFullUserName**
   * **Swift < 4.2**
     * Uses getpwnam to get the full user name, if this method fails, a fatal error will occur
+* **String.Encoding**
+  * Added init(charSet:) to take in IANA Character Set Name
+* **String**
+  * Added init(contentsOf:foundEncoding), init(contentsOfFile:foundEncoding), and init(data:foundEncoding) that patches the init(..., usedEncoding) when below Swift 4.1  or calls the init(..., usedEncoding) when above Swift 4.1
+  * Added init(data:usedEncoding) to match init(contentsOf:usedEncoding) and  init(contentsOfFile:usedEncoding)
 
 ## Authors
 
