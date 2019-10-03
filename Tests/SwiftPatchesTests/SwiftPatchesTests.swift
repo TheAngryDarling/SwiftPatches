@@ -83,6 +83,47 @@ class SwiftPatchesTests: XCTestCase {
         let fName = NSFullUserName()
         print(fName)
     }
+    
+    func testCharSetStringEncoding() {
+        let commonNames: [String] = ["UTF8", "UTF-8", "UTF16", "UTF-16", "UNICODE", "ASCII","Windows-1250","Windows1250"]
+        for name in commonNames {
+            XCTAssertNotNil(String.Encoding(charSet: name), "Unable to find String.Encoding for character set '\(name)'")
+       }
+        XCTAssertNil(String.Encoding(charSet: "BOGUS-ENCODING"))
+    }
+    
+    func testStringInitContentsOf() {
+        var enc: String.Encoding = .utf8
+        do {
+            _ = try String(contentsOfFile: #file, foundEncoding: &enc)
+        } catch {
+            XCTFail("\(error)")
+        }
+        do {
+            _ = try String(contentsOf: URL(fileURLWithPath: #file), foundEncoding: &enc)
+        } catch {
+            XCTFail("\(error)")
+        }
+        do {
+            _ = try String(contentsOf: URL(string: "http://www.google.com/")!, foundEncoding: &enc)
+        } catch {
+            XCTFail("\(error)")
+        }
+        
+        do {
+            
+            _ = try String(data: try Data(contentsOf: URL(fileURLWithPath: #file)), foundEncoding: &enc)
+        } catch {
+            XCTFail("\(error)")
+        }
+        
+        do {
+            
+            _ = try String(data: try Data(contentsOf: URL(fileURLWithPath: #file)), usedEncoding: &enc)
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
 
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
@@ -90,6 +131,8 @@ class SwiftPatchesTests: XCTestCase {
         ("testRandomCollectionElement", testRandomCollectionElement),
         ("testRandomBool", testRandomBool),
         ("testProcess", testProcess),
-        ("testFullUserName", testFullUserName)
+        ("testFullUserName", testFullUserName),
+        ("testCharSetStringEncoding", testCharSetStringEncoding),
+        ("testStringInitContentsOf", testStringInitContentsOf)
     ]
 }
