@@ -20,6 +20,8 @@ Current supported fixed:
     * Added toggle method
 * **Sequence**
   * Added allEquals method (Not a patch function, but a nice simple helper)
+  * **Swift < 4.1**
+    * Added compactMap method
   * **Swift < 4.2**
     * Added allSatisfy method
 * **Collection**
@@ -27,8 +29,6 @@ Current supported fixed:
     * Added firstIndex(where:) method
     * Added firstIndex(of:) method on Elements implementing Equatable
 * **Array**
-  * **Swift < 4.1**
-    * Added compactMap method
   * **Swift < 4.2**
     * Added removeAll method
 * **FileManager**
