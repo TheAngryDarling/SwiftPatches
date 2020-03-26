@@ -51,10 +51,15 @@ public extension Process {
     ///
     /// This will figure out which property to use, either currentDirectoryPath OR currentDirectoryURL depending on the Swift version and Platform version
     /// If this property isn’t used, the current directory is inherited from the process that created the receiver. This method raises an NSInvalidArgumentException if the receiver has already been launched.
+    /// If currentDirectoryURL returns nil and currentDirectoryPath is unavailable then this property will return the URL for FileManager.default.currentDirectoryPath
     var currentDirectory: URL {
         get {
+            
             #if !swift(>=4.2)
                 return URL(fileURLWithPath: self.currentDirectoryPath)
+            #elseif swift(>=5.2)
+                if let url = self.currentDirectoryURL { return url }
+                else { return URL(fileURLWithPath: FileManager.default.currentDirectoryPath) }
             #else
                 #if _runtime(_ObjC)
                     if #available(OSX 10.13, *) {
@@ -75,6 +80,8 @@ public extension Process {
         set {
             #if !swift(>=4.2)
                 self.currentDirectoryPath = newValue.path
+            #elseif swift(>=5.2)
+                self.currentDirectoryURL = newValue
             #else
                 if #available(OSX 10.13, *) {
                     self.currentDirectoryURL = newValue
