@@ -57,9 +57,6 @@ public extension Process {
             
             #if !swift(>=4.2)
                 return URL(fileURLWithPath: self.currentDirectoryPath)
-            #elseif swift(>=5.2)
-                if let url = self.currentDirectoryURL { return url }
-                else { return URL(fileURLWithPath: FileManager.default.currentDirectoryPath) }
             #else
                 #if _runtime(_ObjC)
                     if #available(OSX 10.13, *) {
@@ -72,6 +69,9 @@ public extension Process {
                     } else {
                         return URL(fileURLWithPath: self.currentDirectoryPath)
                     }
+                #elseif swift(>=5.2)
+                    if let url = self.currentDirectoryURL { return url }
+                    else { return URL(fileURLWithPath: FileManager.default.currentDirectoryPath) }
                 #else
                     return self.currentDirectoryURL
                 #endif
@@ -80,14 +80,18 @@ public extension Process {
         set {
             #if !swift(>=4.2)
                 self.currentDirectoryPath = newValue.path
-            #elseif swift(>=5.2)
-                self.currentDirectoryURL = newValue
             #else
-                if #available(OSX 10.13, *) {
+                #if _runtime(_ObjC)
+                    if #available(OSX 10.13, *) {
+                        self.currentDirectoryURL = newValue
+                    } else {
+                        self.currentDirectoryPath = newValue.standardized.resolvingSymlinksInPath().path
+                    }
+                #elseif swift(>=5.0)
                     self.currentDirectoryURL = newValue
-                } else {
+                #else
                     self.currentDirectoryPath = newValue.standardized.resolvingSymlinksInPath().path
-                }
+                #endif
             #endif
         }
     }
