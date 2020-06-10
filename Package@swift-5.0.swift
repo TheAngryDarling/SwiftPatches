@@ -8,6 +8,15 @@ let package = Package(
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
+            name: "CorePatches",
+            targets: ["CorePatches"]),
+        .library(
+            name: "SequencePatches",
+            targets: ["SequencePatches"]),
+        .library(
+            name: "NumericPatches",
+            targets: ["NumericPatches"]),
+        .library(
             name: "SwiftPatches",
             targets: ["SwiftPatches"]),
     ],
@@ -19,8 +28,17 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
-            name: "SwiftPatches",
+            name: "CorePatches",
             dependencies: []),
+        .target(
+            name: "SequencePatches",
+            dependencies: []),
+        .target(
+            name: "NumericPatches",
+            dependencies: []),
+        .target(
+            name: "SwiftPatches",
+            dependencies: ["CorePatches", "SequencePatches", "NumericPatches"]),
         .testTarget(
             name: "SwiftPatchesTests",
             dependencies: ["SwiftPatches"]),
