@@ -60,7 +60,7 @@ public extension Process {
             #else
                 #if _runtime(_ObjC)
                     if #available(OSX 10.13, *) {
-                        #if swift(>=5.1)
+                        #if swift(>=4.2)
                             if let url = self.currentDirectoryURL { return url }
                             else { return URL(fileURLWithPath: self.currentDirectoryPath) }
                         #else
