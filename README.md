@@ -53,11 +53,17 @@ CorePatches:
     * **currentDirectory**:  to handle the decision making for getting/setting the value between currentDirectoryPath and currentDirectoryURL when switching between swift versions and platforms
   * **Added Methods**:
     * **execute**: to handle the decision making for executing either launch and run when switching between swift versions and platforms
-
+* **Result**:
+    * **Swift <= 4.2**: Copied/Modified from Swift Source Code
+    
 NumericPatchs:
 
 * **AdditiveArithmetic** - Added support for Swift < 5.0
   * Added implementation to Int, Int8, Int16, Int32, Int64, UInt, UInt8, UInt16, UInt32, UInt64
+* **BinaryInteger**:
+  * **Swift < 5.0**
+    * **Added Methods**:
+        * **isMultiple(of:)**: Returns `true` if this value is a multiple of the given value, and `false` otherwise. 
 
 SequencePatches:
 
@@ -74,7 +80,10 @@ SequencePatches:
 * **Array**
   * **Swift < 4.2**
     * Added removeAll method
-  
+* **Dictionary**:
+  * **Swift < 5.0**
+    * **Added Methods**:
+        * **compactMapValues**: Returns a new dictionary containing only the key-value pairs that have non-`nil` values as the result of transformation by the given closure. 
 
 ## Authors
 
@@ -82,4 +91,20 @@ SequencePatches:
 
 ## License
 
-This project is licensed under Apache License v2.0 - see the [LICENSE.md](LICENSE.md) file for details
+*Copyright 2020 Tyler Anger*
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+[HERE](LICENSE.md) or [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+## Acknowledgments
+
+Based on and in some cases copied/modified from [Swift Source Code](https://github.com/apple/swift/) to ensure similar standards when dealing with missing objects, methods, and properties
