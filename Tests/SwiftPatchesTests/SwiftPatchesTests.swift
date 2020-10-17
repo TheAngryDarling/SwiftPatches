@@ -124,6 +124,29 @@ class SwiftPatchesTests: XCTestCase {
             XCTFail("\(error)")
         }
     }
+    
+    func testResult() {
+        enum Err: Swift.Error {
+            case testError
+        }
+        var r = Result<Int, Err>.success(1)
+        print(r)
+        r = .failure(.testError)
+        print(r)
+    }
+    
+    func testIntIsMultipleOf() {
+        XCTAssertTrue(0.isMultiple(of: 0))
+        XCTAssertTrue(10.isMultiple(of: 5))
+        XCTAssertFalse(3.isMultiple(of: 2))
+    }
+    
+    func testDictionaryCompactMapValues() {
+        let dict: [String: String] = ["1": "1", "2": "@", "3": "3", "4": "$"]
+        let dict2 = dict.compactMapValues({ return Int($0) })
+        XCTAssertTrue(dict2 == ["1": 1, "3": 3])
+        
+    }
 
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
@@ -133,6 +156,9 @@ class SwiftPatchesTests: XCTestCase {
         ("testProcess", testProcess),
         ("testFullUserName", testFullUserName),
         ("testCharSetStringEncoding", testCharSetStringEncoding),
-        ("testStringInitContentsOf", testStringInitContentsOf)
+        ("testStringInitContentsOf", testStringInitContentsOf),
+        ("testResult", testResult),
+        ("testIntIsMultipleOf", testIntIsMultipleOf),
+        ("testDictionaryCompactMapValues", testDictionaryCompactMapValues)
     ]
 }
