@@ -147,6 +147,49 @@ class SwiftPatchesTests: XCTestCase {
         XCTAssertTrue(dict2 == ["1": 1, "3": 3])
         
     }
+    
+    func testHasher() {
+        if true {
+            let value = true
+            let valueType = "\(type(of: value))"
+            var hasher = Hasher()
+            value.hash(into: &hasher)
+            let hash = hasher.finalize()
+            print("\(valueType) Hasher Value: \(hash)")
+        }
+        if true {
+            let value = "Hello World"
+            let valueType = "\(type(of: value))"
+            var hasher = Hasher()
+            value.hash(into: &hasher)
+            let hash = hasher.finalize()
+            print("\(valueType) Hasher Value: \(hash)")
+        }
+        if true {
+            let value = UInt(123)
+            let valueType = "\(type(of: value))"
+            var hasher = Hasher()
+            value.hash(into: &hasher)
+            let hash = hasher.finalize()
+            print("\(valueType) Hasher Value: \(hash)")
+        }
+        if true {
+            let value = -123
+            let valueType = "\(type(of: value))"
+            var hasher = Hasher()
+            value.hash(into: &hasher)
+            let hash = hasher.finalize()
+            print("\(valueType) Hasher Value: \(hash)")
+        }
+        if true {
+            let value = 5.3
+            let valueType = "\(type(of: value))"
+            var hasher = Hasher()
+            value.hash(into: &hasher)
+            let hash = hasher.finalize()
+            print("\(valueType) Hasher Value: \(hash)")
+        }
+    }
 
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
@@ -159,6 +202,7 @@ class SwiftPatchesTests: XCTestCase {
         ("testStringInitContentsOf", testStringInitContentsOf),
         ("testResult", testResult),
         ("testIntIsMultipleOf", testIntIsMultipleOf),
-        ("testDictionaryCompactMapValues", testDictionaryCompactMapValues)
+        ("testDictionaryCompactMapValues", testDictionaryCompactMapValues),
+        ("testHasher", testHasher)
     ]
 }
