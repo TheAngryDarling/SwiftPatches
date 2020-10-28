@@ -59,5 +59,15 @@ extension UInt64: AdditiveArithmetic {
     public static var zero: UInt64 { return UInt64() }
 }
 
+extension Float: AdditiveArithmetic {
+    public static var zero: Float { return Float() }
+}
+extension Double: AdditiveArithmetic {
+    public static var zero: Double { return Double() }
+}
+extension Decimal: AdditiveArithmetic {
+    public static var zero: Decimal { return Decimal() }
+}
+
 
 #endif
