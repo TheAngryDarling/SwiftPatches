@@ -67,7 +67,7 @@ CorePatches:
 NumericPatchs:
 
 * **AdditiveArithmetic** - Added support for Swift < 5.0
-  * Added implementation to Int, Int8, Int16, Int32, Int64, UInt, UInt8, UInt16, UInt32, UInt64
+  * Added implementation to Int, Int8, Int16, Int32, Int64, UInt, UInt8, UInt16, UInt32, UInt64, Float, Double, Decimal
 * **BinaryInteger**:
   * **Swift < 5.0**
     * **Added Methods**:
