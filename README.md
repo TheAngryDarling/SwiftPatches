@@ -57,6 +57,8 @@ CorePatches:
     * **Swift <= 4.2**: Copied/Modified from Swift Source Code
 * **Hasher**:  Provided to not have to keep wraping method hash(into:) methods in #if !swift(>=4.2)
     * **Swift <= 4.2**: Added fake (Sum) logic for hasher.  It sums the hash value of each object that combines to it, allowing for integer rollover
+* **CaseIterable**:  Provided protocol where Swift < 5.2.  
+    * **Note**: This does not provide automatic implementation of the protocol as is done within Swift >= 5.2
 
     
 NumericPatchs:
