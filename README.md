@@ -59,7 +59,7 @@ CorePatches:
     * **Swift <= 4.2**: Added fake (Sum) logic for hasher.  It sums the hash value of each object that combines to it, allowing for integer rollover
 * **CaseIterable**:  Provided protocol where Swift < 5.2.  
     * **Note**: This does not provide automatic implementation of the protocol as is done within Swift >= 5.2
-
+* **autoreleasepool**: Added basic method for OpenSwift (Non Apple) which just directly calls the body method with no garbage collection.
     
 NumericPatchs:
 

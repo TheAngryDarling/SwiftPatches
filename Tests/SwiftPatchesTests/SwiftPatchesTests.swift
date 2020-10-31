@@ -214,6 +214,13 @@ class SwiftPatchesTests: XCTestCase {
         XCTAssertTrue(allCases.contains(.case3))
         
     }
+    
+    func testAutoreleasepool() {
+        autoreleasepool {
+            let _ : Bool = true
+            let _ : String = "Testing"
+        }
+    }
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
         ("testFirstIndex", testFirstIndex),
@@ -227,6 +234,7 @@ class SwiftPatchesTests: XCTestCase {
         ("testIntIsMultipleOf", testIntIsMultipleOf),
         ("testDictionaryCompactMapValues", testDictionaryCompactMapValues),
         ("testHasher", testHasher),
-        ("testCaseIterable", testCaseIterable)
+        ("testCaseIterable", testCaseIterable),
+        ("testAutoreleasepool", testAutoreleasepool)
     ]
 }
