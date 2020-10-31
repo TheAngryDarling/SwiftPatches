@@ -60,6 +60,9 @@ CorePatches:
 * **CaseIterable**:  Provided protocol where Swift < 5.2.  
     * **Note**: This does not provide automatic implementation of the protocol as is done within Swift >= 5.2
 * **autoreleasepool**: Added basic method for OpenSwift (Non Apple) which just directly calls the body method with no garbage collection.
+* **Set**:
+    * **Added Properties**:
+        * **all**: Addes new static all property where Element inherits CaseIterable.  This property returns a Set of all cases by calling Element.allCases to get a list of all possible values
     
 NumericPatchs:
 

@@ -221,6 +221,31 @@ class SwiftPatchesTests: XCTestCase {
             let _ : String = "Testing"
         }
     }
+    
+    func testSetsAll() {
+        enum TestEnum: String, CaseIterable {
+            case case1
+            case case2
+            case case3
+            
+            #if !swift(>=5.2)
+            public static var allCases: Array<TestEnum> {
+                var rtn = Array<TestEnum>()
+                rtn.append(.case1)
+                rtn.append(.case2)
+                rtn.append(.case3)
+                return rtn
+            }
+            #endif
+        }
+        
+        let set = Set<TestEnum>.all
+        
+        for val in TestEnum.allCases {
+            XCTAssertTrue(set.contains(val))
+        }
+    }
+    
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
         ("testFirstIndex", testFirstIndex),
@@ -235,6 +260,7 @@ class SwiftPatchesTests: XCTestCase {
         ("testDictionaryCompactMapValues", testDictionaryCompactMapValues),
         ("testHasher", testHasher),
         ("testCaseIterable", testCaseIterable),
-        ("testAutoreleasepool", testAutoreleasepool)
+        ("testAutoreleasepool", testAutoreleasepool),
+        ("testSetsAll", testSetsAll)
     ]
 }
