@@ -17,3 +17,9 @@ public extension Set where Element: CaseIterable {
         return rtn
     }
 }
+
+public extension Set {
+    /// Provides an empty set
+    /// This property is provided as a visual way to indicate an emtpy set
+    static var none: Set<Element> { return .init() }
+}

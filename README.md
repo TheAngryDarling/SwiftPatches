@@ -63,6 +63,7 @@ CorePatches:
 * **Set**:
     * **Added Properties**:
         * **all**: Addes new static all property where Element inherits CaseIterable.  This property returns a Set of all cases by calling Element.allCases to get a list of all possible values
+        * **none**: Addes new static none property to visually indacate an empty set
     
 NumericPatchs:
 
