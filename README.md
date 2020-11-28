@@ -65,6 +65,15 @@ CorePatches:
     * **Added Properties**:
         * **all**: Addes new static all property where Element inherits CaseIterable.  This property returns a Set of all cases by calling Element.allCases to get a list of all possible values
         * **none**: Addes new static none property to visually indacate an empty set
+        
+ResultOperators:
+* **Protocols**: 
+    * **ResultEscapeOptionalFailure**: Protocol used to define Failure error type with method to get error for object not found
+* **Operators**:
+    * **Results<SuccessResult, FailureResult>^**: Returns the SuccessResult or throws FailureResult
+    * **Results<SuccessResult?, FailureResult>^!**: Returns the SuccessResult! or throws Failure
+    * **Results<SuccessResult?, FailureResult>^!!** where Failure: ResultEscapeOptionalFailure: Returns the SuccessResult if not nil, or throws ResultsEscapeOptionalFailure.objectIsNil  or throws FailureResult
+
     
 NumericPatchs:
 

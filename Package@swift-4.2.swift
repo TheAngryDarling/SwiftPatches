@@ -17,6 +17,9 @@ let package = Package(
             name: "NumericPatches",
             targets: ["NumericPatches"]),
         .library(
+            name: "ResultOperators",
+            targets: ["ResultOperators"]),
+        .library(
             name: "SwiftPatches",
             targets: ["SwiftPatches"]),
     ],
@@ -31,6 +34,9 @@ let package = Package(
             name: "CorePatches",
             dependencies: []),
         .target(
+            name: "ResultOperators",
+            dependencies: ["CorePatches"]),
+        .target(
             name: "SequencePatches",
             dependencies: []),
         .target(
@@ -38,7 +44,10 @@ let package = Package(
             dependencies: []),
         .target(
             name: "SwiftPatches",
-            dependencies: ["CorePatches", "SequencePatches", "NumericPatches"]),
+            dependencies: ["CorePatches",
+                           "SequencePatches",
+                           "NumericPatches",
+                           "ResultOperators"]),
         .testTarget(
             name: "SwiftPatchesTests",
             dependencies: ["SwiftPatches"]),

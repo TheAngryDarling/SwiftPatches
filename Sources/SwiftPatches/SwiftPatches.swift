@@ -9,3 +9,4 @@ import Foundation
 @_exported import CorePatches
 @_exported import SequencePatches
 @_exported import NumericPatches
+@_exported import ResultOperators
