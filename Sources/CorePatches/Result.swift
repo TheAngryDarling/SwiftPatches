@@ -209,3 +209,9 @@ import Foundation
         }
     #endif
 #endif
+
+extension Result: Results {
+    public typealias SuccessResult = Success
+    public typealias FailureResult = Failure
+    
+}
