@@ -6,7 +6,8 @@
 //
 
 import Foundation
-
+/// Protocol used to define any Result object.
+/// Used for generic implementations
 public protocol Results {
     associatedtype SuccessResult
     associatedtype FailureResult: Error
