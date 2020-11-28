@@ -55,6 +55,7 @@ CorePatches:
     * **execute**: to handle the decision making for executing either launch and run when switching between swift versions and platforms
 * **Result**:
     * **Swift <= 4.2**: Copied/Modified from Swift Source Code
+* **Results**: Protocol that defins any Result object
 * **Hasher**:  Provided to not have to keep wrapping method hash(into:) methods in #if !swift(>=4.2)
     * **Swift <= 4.2**: Added fake (Sum) logic for hasher.  It sums the hash value of each object that combines to it, allowing for integer rollover
 * **CaseIterable**:  Provided protocol where Swift < 5.2.  
