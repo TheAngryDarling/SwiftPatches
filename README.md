@@ -72,8 +72,7 @@ ResultOperators:
 * **Operators**:
     * **Results<SuccessResult, FailureResult>^**: Returns the SuccessResult or throws FailureResult
     * **Results<SuccessResult?, FailureResult>^!**: Returns the SuccessResult! or throws Failure
-    * **Results<SuccessResult?, FailureResult>^!!** where Failure: ResultEscapeOptionalFailure: Returns the SuccessResult if not nil, or throws ResultsEscapeOptionalFailure.objectIsNil  or throws FailureResult
-
+    * **Results<SuccessResult?, FailureResult>^?** where Failure: ResultEscapeOptionalFailure: Returns the SuccessResult if not nil, or throws ResultsEscapeOptionalFailure.objectIsNil  or throws FailureResult
     
 NumericPatchs:
 
