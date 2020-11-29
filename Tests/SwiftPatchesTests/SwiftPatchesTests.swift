@@ -1,5 +1,11 @@
 import XCTest
+#if swift(>=4.1)
+    #if canImport(FoundationXML)
+        import FoundationNetworking
+    #endif
+#endif
 @testable import SwiftPatches
+
 
 class SwiftPatchesTests: XCTestCase {
     
@@ -246,6 +252,104 @@ class SwiftPatchesTests: XCTestCase {
         }
     }
     
+    func testResultTypes() {
+        enum BaseErrors: Swift.Error {
+            case fail
+        }
+        enum Errors: Swift.Error, ResultEscapeOptionalFailure {
+            case fail
+            case notfound
+            
+            static func getObjectIsNilError(for results: Result<Bool?, Errors>) -> Error {
+                return Errors.notfound
+            }
+        }
+        enum URLErrors: Swift.Error, ResultEscapeOptionalFailure {
+            case fail
+            case notfound(URL)
+            
+            static func getObjectIsNilError(for results: URLResult<Bool?, URLErrors>) -> Error {
+                return URLErrors.notfound(results.details)
+            }
+        }
+        enum URLRequestErrors: Swift.Error, ResultEscapeOptionalFailure {
+            case fail
+            case notfound(URLRequestResponseDetails)
+            
+            static func getObjectIsNilError(for results: URLRequestResult<Bool?, URLRequestErrors>) -> Error {
+                return URLRequestErrors.notfound(results.details)
+            }
+        }
+        
+        if true {
+            let successResult = Result<Bool, Errors>.success(true)
+            XCTAssertNoThrow(try successResult^)
+            let optSuccessResult1 = Result<Bool?, BaseErrors>.success(nil)
+            XCTAssertNoThrow(try optSuccessResult1^)
+            let optSuccessResult2 = Result<Bool?, BaseErrors>.success(false)
+            XCTAssertNoThrow(try optSuccessResult2^!)
+            let optSuccessResult3 = Result<Bool?, Errors>.success(nil)
+            XCTAssertThrowsError(try optSuccessResult3^?)
+            let failureResult = Result<Bool, Errors>.failure(.fail)
+            XCTAssertThrowsError(try failureResult^)
+            let optFailureResult = Result<Bool?, Errors>.failure(.fail)
+            XCTAssertThrowsError(try optFailureResult^)
+        }
+        
+        if true {
+            let details = URL(string: "http://www.google.com")!
+            let successResult = URLResult<Bool, URLErrors>.success(true,
+                                                                   withDetails: details)
+            XCTAssertNoThrow(try successResult^)
+            let optSuccessResult1 = URLResult<Bool?, BaseErrors>.success(nil,
+                                                                         withDetails: details)
+            XCTAssertNoThrow(try optSuccessResult1^)
+            let optSuccessResult2 = URLResult<Bool?, BaseErrors>.success(false,
+                                                                         withDetails: details)
+            XCTAssertNoThrow(try optSuccessResult2^!)
+            let optSuccessResult3 = URLResult<Bool?, URLErrors>.success(nil,
+                                                                        withDetails: details)
+            XCTAssertThrowsError(try optSuccessResult3^?)
+            let failureResult = URLResult<Bool, URLErrors>.failure(.fail,
+                                                                   withDetails: details)
+            XCTAssertThrowsError(try failureResult^)
+            let optFailureResult = URLResult<Bool?, URLErrors>.failure(.fail,
+                                                                       withDetails: details)
+            XCTAssertThrowsError(try optFailureResult^)
+        }
+        
+        if true {
+            let testURL = URL(string: "http://www.google.com")!
+            let request = URLRequest(url: testURL)
+            let details = URLRequestResponseDetails(request: request,
+                                                    responseDetails: .http(url: testURL,
+                                                                           mimeType: "text/html",
+                                                                           textEncodingName: "utf8",
+                                                                           suggestedFileName: nil,
+                                                                           expectedContentLength: -1,
+                                                                           httpDetails: .init(statusCode: 200)))
+            
+            let successResult = URLRequestResult<Bool, URLRequestErrors>.success(true,
+                                                                                 withDetails: details)
+            XCTAssertNoThrow(try successResult^)
+            let optSuccessResult1 = URLRequestResult<Bool?, URLRequestErrors>.success(nil,
+                                                                                      withDetails: details)
+            XCTAssertNoThrow(try optSuccessResult1^)
+            let optSuccessResult2 = URLRequestResult<Bool?, BaseErrors>.success(false,
+                                                                                withDetails: details)
+            XCTAssertNoThrow(try optSuccessResult2^!)
+            let optSuccessResult3 = URLRequestResult<Bool?, URLRequestErrors>.success(nil,
+                                                                                      withDetails: details)
+            XCTAssertThrowsError(try optSuccessResult3^?)
+            let failureResult = URLRequestResult<Bool, URLRequestErrors>.failure(.fail,
+                                                                                 withDetails: details)
+            XCTAssertThrowsError(try failureResult^)
+            let optFailureResult = URLRequestResult<Bool?, URLRequestErrors>.failure(.fail,
+                                                                                     withDetails: details)
+            XCTAssertThrowsError(try optFailureResult^)
+        }
+    }
+    
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
         ("testFirstIndex", testFirstIndex),
@@ -261,6 +365,7 @@ class SwiftPatchesTests: XCTestCase {
         ("testHasher", testHasher),
         ("testCaseIterable", testCaseIterable),
         ("testAutoreleasepool", testAutoreleasepool),
-        ("testSetsAll", testSetsAll)
+        ("testSetsAll", testSetsAll),
+        ("testResultTypes", testResultTypes)
     ]
 }

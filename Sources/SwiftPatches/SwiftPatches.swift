@@ -10,3 +10,4 @@ import Foundation
 @_exported import SequencePatches
 @_exported import NumericPatches
 @_exported import ResultOperators
+@_exported import MoreResults

@@ -74,6 +74,13 @@ ResultOperators:
     * **Results<SuccessResult?, FailureResult>^!**: Returns the SuccessResult! or throws Failure
     * **Results<SuccessResult?, FailureResult>^?** where Failure: ResultEscapeOptionalFailure: Returns the SuccessResult if not nil, or throws ResultsEscapeOptionalFailure.objectIsNil  or throws FailureResult
     
+MoreResults:
+   * **DetailedResult**: Similar to Result with storage for extra details
+   * **URLResult**: Typealias of DetailedResult where the Details is of URL
+   * **URLRequestResponseDetails**: Storage details for a request and its corresponding response
+       * **URLResponseDetails**: Storage details for the URLResponse
+   * **URLRequestResult**: Typealias of DetailedResult where Details is of URLRequestResponseDetails
+    
 NumericPatchs:
 
 * **AdditiveArithmetic** - Added support for Swift < 5.0
