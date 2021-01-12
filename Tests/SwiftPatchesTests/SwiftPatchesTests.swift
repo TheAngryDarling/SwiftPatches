@@ -350,6 +350,31 @@ class SwiftPatchesTests: XCTestCase {
         }
     }
     
+    func testIdentifiableObject() {
+        struct StructObject: Identifiable {
+            let id: Int
+        }
+        class ClassObject: Identifiable { }
+        
+        let struct1 = StructObject(id: 1)
+        let struct2 = StructObject(id: 2)
+        let structCopy = struct1
+        
+        XCTAssertNotEqual(struct1.id, struct2.id, "Struct Id's should not equal")
+        XCTAssertEqual(struct1.id, structCopy.id, "Struct Id's should equal")
+        
+        let class1 = ClassObject()
+        let class2 = ClassObject()
+        let classCopy = class1
+        
+        
+        XCTAssertNotEqual(class1.id, class2.id, "Class Id's should not equal")
+        XCTAssertEqual(class1.id, classCopy.id, "Class Id's should equal")
+        
+        
+        
+    }
+    
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
         ("testFirstIndex", testFirstIndex),

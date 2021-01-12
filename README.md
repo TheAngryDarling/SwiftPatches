@@ -65,6 +65,7 @@ CorePatches:
     * **Added Properties**:
         * **all**: Addes new static all property where Element inherits CaseIterable.  This property returns a Set of all cases by calling Element.allCases to get a list of all possible values
         * **none**: Addes new static none property to visually indacate an empty set
+* **Identifiable**:  Provided protocol where Swift < 5.1.  
         
 ResultOperators:
 * **Protocols**: 
