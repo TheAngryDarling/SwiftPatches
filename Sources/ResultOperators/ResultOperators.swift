@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CorePatches
+import ResultPatches
 
 postfix operator ^
 public postfix func ^<R: Results>(results: R) throws -> R.SuccessResult {
