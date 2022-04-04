@@ -11,3 +11,4 @@ import Foundation
 @_exported import NumericPatches
 @_exported import ResultOperators
 @_exported import MoreResults
+@_exported import SpecialLiteralExpressionHelpers
