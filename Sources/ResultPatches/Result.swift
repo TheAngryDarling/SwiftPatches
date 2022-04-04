@@ -169,6 +169,7 @@ import Foundation
 
         extension Result : Hashable where Success : Hashable, Failure : Hashable {
 
+            #if !swift(>=4.2)
             /// The hash value.
             ///
             /// Hash values are not guaranteed to be equal across different executions of
@@ -182,6 +183,7 @@ import Foundation
                     case .failure(let rtn): return rtn.hashValue
                 }
             }
+            #endif
 
             #if swift(>=4.2)
                 /// Hashes the essential components of this value by feeding them into the
