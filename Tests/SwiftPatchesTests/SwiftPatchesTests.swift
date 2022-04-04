@@ -4,8 +4,8 @@ import XCTest
         import FoundationNetworking
     #endif
 #endif
+import UnitTestingHelper
 @testable import SwiftPatches
-
 
 class SwiftPatchesTests: XCTestCase {
     
@@ -27,9 +27,102 @@ class SwiftPatchesTests: XCTestCase {
         let idx = ary.firstIndex(where: { $0 == ary[testIdx]})
         XCTAssert(idx == testIdx, "Expected to find index of \(testIdx)")
     }
-    
+
     func testRandomGenerator() {
+        
+        // There are 3 slightly different definitions of testRandFixedInts to
+        // get rid of any warnings about Integer.Magnitude with the different
+        // swift versions
+        #if swift(>=4.2)
+        func testRandFixedInts<Integer, Generator>(generator: inout Generator,
+                                                   for type: Integer.Type,
+                                                   file: StaticString,
+                                                   line: UInt = #line) where Generator: RandomNumberGenerator,
+                                                                             Integer: FixedWidthInteger {
+            var vals: [Integer] = []
+            for _ in 0..<10 {
+                let val = Integer.random(in: Integer.min...Integer.max, using: &generator)
+                if !vals.isEmpty {
+                    XCTAssertNotEqual(vals.last, val,
+                                      "Value \(val) already existes in array \(vals)",
+                                      file: file,
+                                      line: line)
+                }
+                vals.append(val)
+            }
+        }
+        #elseif swift(>=4.1)
+        func testRandFixedInts<Integer, Generator>(generator: inout Generator,
+                                                   for type: Integer.Type,
+                                                   file: StaticString,
+                                                   line: UInt = #line) where Generator: RandomNumberGenerator,
+                                                                             Integer: FixedWidthInteger,
+                                                                             Integer.Magnitude: UnsignedInteger {
+            var vals: [Integer] = []
+            for _ in 0..<10 {
+                let val = Integer.random(in: Integer.min...Integer.max, using: &generator)
+                if !vals.isEmpty {
+                    XCTAssertNotEqual(vals.last, val,
+                                      "Value \(val) already existes in array \(vals)",
+                                      file: file,
+                                      line: line)
+                }
+                vals.append(val)
+            }
+        }
+        #else
+        func testRandFixedInts<Integer, Generator>(generator: inout Generator,
+                                                   for type: Integer.Type,
+                                                   file: StaticString,
+                                                   line: UInt = #line) where Generator: RandomNumberGenerator,
+                                                                             Integer: FixedWidthInteger,
+                                                                             Integer.Magnitude: FixedWidthInteger,
+                                                                             Integer.Magnitude: UnsignedInteger {
+            var vals: [Integer] = []
+            for _ in 0..<10 {
+                let val = Integer.random(in: Integer.min...Integer.max, using: &generator)
+                if !vals.isEmpty {
+                    XCTAssertNotEqual(vals.last, val,
+                                      "Value \(val) already existes in array \(vals)",
+                                      file: file,
+                                      line: line)
+                }
+                vals.append(val)
+            }
+        }
+        #endif
+        
+        func testRandFloatingPoint<FloatingPointNumber, Generator>(generator: inout Generator,
+                                                             for type: FloatingPointNumber.Type,
+                                                             file: StaticString,
+                                                             line: UInt = #line) where FloatingPointNumber: BinaryFloatingPoint, Generator: RandomNumberGenerator, FloatingPointNumber.RawSignificand: FixedWidthInteger {
+            var vals: [FloatingPointNumber] = []
+            for _ in 0..<10 {
+                let val = FloatingPointNumber.random(in: 0.0..<100.0, using: &generator)
+                XCTAssert(!vals.contains(val), "Value \(val) already existes in array \(vals)",
+                          file: file,
+                          line: line)
+                vals.append(val)
+            }
+        }
+        
         var generator: SystemRandomNumberGenerator = SystemRandomNumberGenerator()
+        testRandFixedInts(generator: &generator, for: Int8.self, file: currentSourceFilePath())
+        testRandFixedInts(generator: &generator, for: Int16.self, file: currentSourceFilePath())
+        testRandFixedInts(generator: &generator, for: Int32.self, file: currentSourceFilePath())
+        testRandFixedInts(generator: &generator, for: Int64.self, file: currentSourceFilePath())
+        
+        testRandFixedInts(generator: &generator, for: UInt8.self, file: currentSourceFilePath())
+        testRandFixedInts(generator: &generator, for: UInt16.self, file: currentSourceFilePath())
+        testRandFixedInts(generator: &generator, for: UInt32.self, file: currentSourceFilePath())
+        testRandFixedInts(generator: &generator, for: UInt64.self, file: currentSourceFilePath())
+        
+        
+        testRandFloatingPoint(generator: &generator, for: Float.self, file: currentSourceFilePath())
+        //testRandFloatingPoint(generator: &generator, for: Float16.self, file: currentSourceFilePath())
+        testRandFloatingPoint(generator: &generator, for: Float80.self, file: currentSourceFilePath())
+        
+        testRandFloatingPoint(generator: &generator, for: Double.self, file: currentSourceFilePath())
         
         var vals: [UInt64] = []
         for _ in 0..<10 {
@@ -129,6 +222,32 @@ class SwiftPatchesTests: XCTestCase {
         } catch {
             XCTFail("\(error)")
         }
+    }
+    
+    func testCharacterPatches() {
+        let char: Character = "a"
+        
+        /*if char.isASCII {
+            XCTAssertNotNil(char.asciiValue)
+        }*/
+        //XCTAssertTrue(char.isLetter)
+        XCTAssertFalse(char.isPunctuation)
+        XCTAssertFalse(char.isNewline)
+        XCTAssertFalse(char.isWhitespace)
+        XCTAssertFalse(char.isSymbol)
+        //XCTAssertFalse(char.isMathSymbol)
+        //XCTAssertFalse(char.isCurrencySymbol)
+        XCTAssertTrue(char.isCased)
+        XCTAssertFalse(char.isUppercase)
+        XCTAssertTrue(char.isLowercase)
+        if char.isHexDigit {
+            XCTAssertNotNil(char.hexDigitValue)
+        }
+        /*XCTAssertFalse(char.isNumber)
+        if char.isWholeNumber {
+            XCTAssertNotNil(char.wholeNumberValue)
+        }*/
+        
     }
     
     func testResult() {
@@ -375,6 +494,13 @@ class SwiftPatchesTests: XCTestCase {
         
     }
     
+    func testArrayPatches() {
+        let ary: [UInt8] = [0,1,2,3,4,5]
+        let _: UInt8?? = ary.withContiguousStorageIfAvailable {
+            return $0.first
+        }
+    }
+    
     static var allTests = [
         ("testFileExistsIsDirectory", testFileExistsIsDirectory),
         ("testFirstIndex", testFirstIndex),
@@ -384,6 +510,7 @@ class SwiftPatchesTests: XCTestCase {
         ("testFullUserName", testFullUserName),
         ("testCharSetStringEncoding", testCharSetStringEncoding),
         ("testStringInitContentsOf", testStringInitContentsOf),
+        ("testCharacterPatches", testCharacterPatches),
         ("testResult", testResult),
         ("testIntIsMultipleOf", testIntIsMultipleOf),
         ("testDictionaryCompactMapValues", testDictionaryCompactMapValues),
@@ -391,6 +518,8 @@ class SwiftPatchesTests: XCTestCase {
         ("testCaseIterable", testCaseIterable),
         ("testAutoreleasepool", testAutoreleasepool),
         ("testSetsAll", testSetsAll),
-        ("testResultTypes", testResultTypes)
+        ("testResultTypes", testResultTypes),
+        ("testIdentifiableObject", testIdentifiableObject),
+        ("testArrayPatches", testArrayPatches)
     ]
 }
