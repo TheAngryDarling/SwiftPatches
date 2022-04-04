@@ -31,6 +31,26 @@ public extension Array {
                 else { idx += 1 }
             }
         }
+        
     #endif
-    
+    #if !swift(>=5.0)
+        /// Call body(p), where p is a pointer to the collection’s mutable contiguous storage. If no such storage exists, it is first created. If the collection does not support an internal representation in a form of mutable contiguous storage, body is not called and nil is returned.
+        mutating func withContiguousMutableStorageIfAvailable<R>(
+            _ body: (inout UnsafeMutableBufferPointer<Element>) throws -> R
+            ) rethrows -> R? {
+            return try withUnsafeMutableBufferPointer {
+                (bufferPointer) -> R in
+                return try body(&bufferPointer)
+            }
+        }
+         /// Call body(p), where p is a pointer to the collection’s contiguous storage. If no such storage exists, it is first created. If the collection does not support an internal representation in a form of contiguous storage, body is not called and nil is returned.
+        func withContiguousStorageIfAvailable<R>(
+            _ body: (UnsafeBufferPointer<Element>) throws -> R
+            ) rethrows -> R? {
+            return try withUnsafeBufferPointer {
+                (bufferPointer) -> R in
+                return try body(bufferPointer)
+            }
+        }
+    #endif
 }
