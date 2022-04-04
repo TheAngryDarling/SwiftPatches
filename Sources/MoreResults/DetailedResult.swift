@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CorePatches
+import ResultPatches
 
 public enum DetailedResult<Success, Failure, Details>: Results where Failure: Error {
     public typealias SuccessResult = Success
