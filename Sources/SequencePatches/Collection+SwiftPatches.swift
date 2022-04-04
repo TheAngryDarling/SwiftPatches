@@ -26,6 +26,18 @@ public extension Collection {
             }
             return nil
         }
+        /// Returns the first element of the sequence that satisfies the given predicate.
+        ///
+        /// - Parameter predicate: A closure that takes an element of the sequence as its argument and returns a Boolean value indicating whether the element is a match.
+        /// - Returns: The first element of the sequence that satisfies predicate, or nil if there is no element that satisfies predicate.
+        func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
+            for v in self {
+                if try predicate(v) {
+                   return v
+                }
+            }
+            return nil
+        }
     #endif
 }
 
@@ -37,7 +49,7 @@ public extension Collection where Element: Equatable {
         /// - Parameter element: An element to search for in the collection.
         /// - Returns: The first index where element is found. If element is not found in the collection, returns nil.
         func firstIndex(of element: Element) -> Self.Index? {
-            return self.firstIndex { $0 == element }
+            return self.firstIndex { return $0 == element }
         }
     #endif
 }
