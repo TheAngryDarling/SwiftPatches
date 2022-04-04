@@ -146,34 +146,71 @@ public extension Character {
 
 #if !swift(>=5.0)
 
-let hexValues: [String] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
-public extension Character {
-    /// The numeric value this character represents, if it is a hexadecimal digit.
-    ///
-    /// Hexadecimal digits include 0-9, Latin letters a-f and A-F, and their
-    /// fullwidth compatibility forms. If the character does not represent a
-    /// hexadecimal digit, the value of this property is `nil`.
-    ///
-    ///     let chars: [Character] = ["1", "a", "Ｆ", "g"]
-    ///     for ch in chars {
-    ///         print(ch, "-->", ch.hexDigitValue)
-    ///     }
-    ///     // Prints:
-    ///     // 1 --> Optional(1)
-    ///     // a --> Optional(10)
-    ///     // Ｆ --> Optional(15)
-    ///     // g --> nil
-    var hexDigitValue: Int? {
-        return hexValues.firstIndex(of: self.lowercased())
+    #if !swift(>=4.2)
+    fileprivate extension Collection {
+        /// Returns the first element of the sequence that satisfies the given predicate.
+        ///
+        /// - Parameter predicate: A closure that takes an element of the sequence as its argument and returns a Boolean value indicating whether the element is a match.
+        /// - Returns: The first element of the sequence that satisfies predicate, or nil if there is no element that satisfies predicate.
+        func firstIndex(where predicate: (Element) throws -> Bool) rethrows -> Self.Index? {
+            for (i,v) in self.enumerated() {
+                if try predicate(v) {
+                    #if !swift(>=4.0.4)
+                        return self.index(self.startIndex, offsetBy: IndexDistance(i))
+                    #else
+                        return (i as! Index)
+                    #endif
+                }
+            }
+            return nil
+        }
     }
-    
-    /// A Boolean value indicating whether this character represents a
-    /// hexadecimal digit.
-    ///
-    /// Hexadecimal digits include 0-9, Latin letters a-f and A-F, and their
-    /// fullwidth compatibility forms. To get the character's value, use the
-    /// `hexDigitValue` property.
-    var isHexDigit: Bool { return self.hexDigitValue != nil }
-}
+
+    fileprivate extension Collection where Element: Equatable {
+        
+        #if !swift(>=4.1.4)
+            /// Available when Element conforms to Equatable.
+            ///
+            /// - Parameter element: An element to search for in the collection.
+            /// - Returns: The first index where element is found. If element is not found in the collection, returns nil.
+            func firstIndex(of element: Element) -> Self.Index? {
+                return self.firstIndex { $0 == element }
+            }
+        #endif
+    }
+
+    #endif
+
+    let hexValues: [String] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
+    public extension Character {
+        /// The numeric value this character represents, if it is a hexadecimal digit.
+        ///
+        /// Hexadecimal digits include 0-9, Latin letters a-f and A-F, and their
+        /// fullwidth compatibility forms. If the character does not represent a
+        /// hexadecimal digit, the value of this property is `nil`.
+        ///
+        ///     let chars: [Character] = ["1", "a", "Ｆ", "g"]
+        ///     for ch in chars {
+        ///         print(ch, "-->", ch.hexDigitValue)
+        ///     }
+        ///     // Prints:
+        ///     // 1 --> Optional(1)
+        ///     // a --> Optional(10)
+        ///     // Ｆ --> Optional(15)
+        ///     // g --> nil
+        var hexDigitValue: Int? {
+            let lower = self.lowercased()
+            return hexValues.firstIndex(where: { return $0 == lower  })
+            //return hexValues.firstIndex(of: self.lowercased())
+        }
+        
+        /// A Boolean value indicating whether this character represents a
+        /// hexadecimal digit.
+        ///
+        /// Hexadecimal digits include 0-9, Latin letters a-f and A-F, and their
+        /// fullwidth compatibility forms. To get the character's value, use the
+        /// `hexDigitValue` property.
+        var isHexDigit: Bool { return self.hexDigitValue != nil }
+    }
 
 #endif
