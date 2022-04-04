@@ -1,6 +1,6 @@
 //
 //  String.Encoding+SwiftPatches.swift
-//  SwiftPatches
+//  StringPatches
 //
 //  Created by Tyler Anger on 2019-10-03.
 //
