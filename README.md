@@ -18,20 +18,6 @@ CorePatches:
 * **Bool**
     * **Methods**: 
       *  **toggle (Swift < 4.1)**: Flips the value of the bool
-* **String.Encoding**
-  * **Inits**:
-    * init(charSet:) 
-      * To take in IANA Character Set Name
-* **String**
-  * **Inits**:
-    * init(contentsOf:foundEncoding)
-      * that patches the init(..., usedEncoding) when below Swift 4.1  or calls the init(..., usedEncoding) when above Swift 4.1
-    * init(contentsOfFile:foundEncoding)
-      * that patches the init(..., usedEncoding) when below Swift 4.1  or calls the init(..., usedEncoding) when above Swift 4.1
-    * init(data:foundEncoding) 
-      * that patches the init(..., usedEncoding) when below Swift 4.1  or calls the init(..., usedEncoding) when above Swift 4.1
-    * init(data:usedEncoding) 
-      * to match init(contentsOf:usedEncoding) and  init(contentsOfFile:usedEncoding)
 * **Random** - Added random support for **Swift < 4.2** 
   * **Protocols**: RandomNumberGenerator
   * **Classes**: SystemRandomNumberGenerator
@@ -53,11 +39,6 @@ CorePatches:
     * **currentDirectory**:  to handle the decision making for getting/setting the value between currentDirectoryPath and currentDirectoryURL when switching between swift versions and platforms
   * **Added Methods**:
     * **execute**: to handle the decision making for executing either launch and run when switching between swift versions and platforms
-* **Result**:
-    * **Swift <= 4.2**: Copied/Modified from Swift Source Code
-* **Results**: Protocol that defins any Result object
-* **Hasher**:  Provided to not have to keep wrapping method hash(into:) methods in #if !swift(>=4.2)
-    * **Swift <= 4.2**: Added fake (Sum) logic for hasher.  It sums the hash value of each object that combines to it, allowing for integer rollover
 * **CaseIterable**:  Provided protocol where Swift < 5.2.  
     * **Note**: This does not provide automatic implementation of the protocol as is done within Swift >= 5.2
 * **autoreleasepool**: Added basic method for OpenSwift (Non Apple) which just directly calls the body method with no garbage collection.
@@ -66,8 +47,20 @@ CorePatches:
         * **all**: Addes new static all property where Element inherits CaseIterable.  This property returns a Set of all cases by calling Element.allCases to get a list of all possible values
         * **none**: Addes new static none property to visually indacate an empty set
 * **Identifiable**:  Provided protocol where Swift < 5.1.  
-        
+      
+HashablePatches:
+
+* **Hasher**:  Provided to not have to keep wrapping method hash(into:) methods in #if !swift(>=4.2)
+    * **Swift <= 4.2**: Added fake (Sum) logic for hasher.  It sums the hash value of each object that combines to it, allowing for integer rollover
+    
+ResultPatches:
+
+* **Result**:
+    * **Swift <= 4.2**: Copied/Modified from Swift Source Code
+* **Results**: Protocol that defins any Result object
+
 ResultOperators:
+
 * **Protocols**: 
     * **ResultEscapeOptionalFailure**: Protocol used to define Failure error type with method to get error for object not found
 * **Operators**:
@@ -97,19 +90,63 @@ SequencePatches:
   * Added allEquals method (Not a patch function, but a nice simple helper)
   * **Swift < 4.1**
     * Added compactMap method
+    * Added contains(where:) method
   * **Swift < 4.2**
     * Added allSatisfy method
 * **Collection**
   * **Swift < 4.2**
     * Added firstIndex(where:) method
+    * Added first(where:) method
     * Added firstIndex(of:) method on Elements implementing Equatable
+* **BidirectionalCollection**
+  * **Swift < 4.1**
+    * Added lastIndex(where:) method
+    * Added last(where:) method
+    * Added lastIndex(of:) method
 * **Array**
   * **Swift < 4.2**
     * Added removeAll method
+  * ** Swift < 5.0**
+    * Added withContiguousMutableStorageIfAvailable method
+    * Added withContiguousStorageIfAvailable method
 * **Dictionary**:
   * **Swift < 5.0**
     * **Added Methods**:
-        * **compactMapValues**: Returns a new dictionary containing only the key-value pairs that have non-`nil` values as the result of transformation by the given closure. 
+        * **compactMapValues**: Returns a new dictionary containing only the key-value pairs that have non-`nil` values as the result of transformation by the given closure.
+        
+SpecialLiteralExpressionHelpers:
+
+* **currentSourceFilePath**: Method used instead of #file or #filePath depending on the swift version
+
+StringPatches:
+
+* **String.Encoding**
+  * **Inits**:
+    * init(charSet:) 
+      * To take in IANA Character Set Name
+* **String**
+  * **Inits**:
+    * init(contentsOf:foundEncoding)
+      * that patches the init(..., usedEncoding) when below Swift 4.1  or calls the init(..., usedEncoding) when above Swift 4.1
+    * init(contentsOfFile:foundEncoding)
+      * that patches the init(..., usedEncoding) when below Swift 4.1  or calls the init(..., usedEncoding) when above Swift 4.1
+    * init(data:foundEncoding) 
+      * that patches the init(..., usedEncoding) when below Swift 4.1  or calls the init(..., usedEncoding) when above Swift 4.1
+    * init(data:usedEncoding) 
+      * to match init(contentsOf:usedEncoding) and  init(contentsOfFile:usedEncoding)
+ * **Character**: Added the following properties when missing
+    * isUppercase
+    * uppercased()
+    * isLowercase 
+    * lowercased()
+    * isCased
+    * isSymbol
+    * isHexDigit
+    * hexDigitValue
+    * isPunctuation
+    * isNewline
+    * isWhitespace
+    
 
 ## Authors
 
