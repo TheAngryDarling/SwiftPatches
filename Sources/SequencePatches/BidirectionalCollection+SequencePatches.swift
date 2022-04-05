@@ -31,7 +31,7 @@ public extension BidirectionalCollection {
     ///
     /// - Complexity: O(*n*), where *n* is the length of the collection.
     func lastIndex(where predicate: (Element) throws -> Bool) rethrows -> Self.Index? {
-        for (i,v) in self.reversed().enumerated() {
+        for (i,v) in self.enumerated().reversed() {
             if try predicate(v) {
                 #if !swift(>=4.0.4)
                     return self.index(self.startIndex, offsetBy: IndexDistance(i))
