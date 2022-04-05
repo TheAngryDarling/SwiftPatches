@@ -494,11 +494,53 @@ class SwiftPatchesTests: XCTestCase {
         
     }
     
-    func testArrayPatches() {
-        let ary: [UInt8] = [0,1,2,3,4,5]
-        let _: UInt8?? = ary.withContiguousStorageIfAvailable {
-            return $0.first
+    func testSequencePatches() {
+        
+        // Dictionary Test
+        let dict: [String: UInt8?] = ["a": 1, "b": nil]
+        XCTAssertFalse(dict.compactMapValues({ return $0 }).keys.contains("b"))
+        
+        // Array Tests
+        var ary: [UInt8] = [0,1,2,3,4,5]
+        defer {
+            ary.removeAll()
+            XCTAssertTrue(ary.isEmpty)
         }
+        
+        // just making sure method is available on each compile
+        let firstB: UInt8? = ary.withContiguousStorageIfAvailable {
+            return $0.first!
+        }
+        XCTAssertEqual(firstB, ary[0])
+        // just making sure method is available on each compile
+        ary.withContiguousMutableStorageIfAvailable {
+            $0[0] = 10
+        }
+        XCTAssertEqual(ary[0], 10)
+        
+        // Making sure no ambigious errors
+        XCTAssertTrue(ary.contains(where: { return $0 == 3}))
+        
+        //Sequence Tests
+        ary = ary.compactMap({
+            guard $0 != 3 else { return nil }
+            return $0
+        })
+        // Make sure 3 was removed
+        XCTAssertFalse(ary.contains(where: { return $0 == 3}))
+        
+        XCTAssertTrue(ary.allSatisfy({ return $0 < UInt8.max }))
+        
+        /// Collection Tests
+        XCTAssertEqual(ary.first(where: { return $0 == 2 }), 2)
+        XCTAssertEqual(ary.firstIndex(where: { return $0 == 2 }), 2)
+        XCTAssertEqual(ary.firstIndex(of: 2), 2)
+        
+        /// BidirectionalCollection Tests
+        XCTAssertEqual(ary.last(where: { return $0 == 5 }), 5)
+        XCTAssertEqual(ary.lastIndex(where: { return $0 == 5 }), 4)
+        XCTAssertEqual(ary.lastIndex(of: 5), 4)
+        
     }
     
     static var allTests = [
@@ -520,6 +562,6 @@ class SwiftPatchesTests: XCTestCase {
         ("testSetsAll", testSetsAll),
         ("testResultTypes", testResultTypes),
         ("testIdentifiableObject", testIdentifiableObject),
-        ("testArrayPatches", testArrayPatches)
+        ("testSequencePatches", testSequencePatches)
     ]
 }
