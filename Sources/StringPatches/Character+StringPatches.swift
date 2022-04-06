@@ -49,14 +49,17 @@ public extension Character {
 #endif
 
 #if !swift(>=5.0)
-public extension Character {
+fileprivate extension Character {
     var unicodeScalars: String.UnicodeScalarView {
         return String(self).unicodeScalars
     }
     
-    private var unicodeScalar: Unicode.Scalar {
+    var unicodeScalar: Unicode.Scalar {
         return self.unicodeScalars.first!
     }
+}
+public extension Character {
+    
     /// A Boolean value indicating whether this character represents whitespace,
     /// including newlines.
     ///
